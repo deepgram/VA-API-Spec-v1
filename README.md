@@ -11,17 +11,20 @@ WebSocket-based, real-time bidirectional communication.
 
 ### Client Messages
 
-| Type                   | Structure                                                                   | Notes                        |
-| ---------------------- | --------------------------------------------------------------------------- | ---------------------------- |
-| settings               | `{ "type": "settings", ...SettingsConfiguration }`                          | Configures agent behavior    |
-| function_call_response | `{ "type": "function_call_response", "id": "", "name": "", "content": "" }` | Response to function request |
-| Binary Audio           | `[binary data]`                                                             | Audio input per settings     |
+| Type                  | Structure                                                                                                                    | Notes                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| SettingsConfiguration | `{ "type": "SettingsConfiguration", ...SettingsConfiguration }`                                                              | Initializes the voice agent and sets up audio transmission formats                       |
+| UpdateInstructions    | `{ "type": "UpdateInstructions", "instructions": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation |
+| UpdateSpeak           | `{ "type": "UpdateSpeak ", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }` | Enables changing the Speak model during the conversation                                 |
+| InjectAgentMessage    | `{ "type": "InjectAgentMessage", "content": "" }`                                                                            | Triggers an immediate statement from the agent                                           |
+| FunctionCallResponse  | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                                    | Sends the result of a function call back to the server                                   |
+| Binary Audio          | `[binary data]`                                                                                                              | Audio input per settings                                                                 |
 
 #### Settings Example
 
 ```json
 {
-  "type": "settings",
+  "type": "SettingsConfiguration",
   "type": "",
   "experimental_features": false,
   "audio": {
@@ -97,7 +100,7 @@ WebSocket-based, real-time bidirectional communication.
 
 ```json
 {
-  "type": "function_call_response",
+  "type": "FunctionCallResponse",
   "id": "",
   "name": "",
   "content": ""
@@ -140,17 +143,6 @@ WebSocket-based, real-time bidirectional communication.
   ]
 }
 ```
-
-#### Status Example
-
-```json
-{
-  "type": "status",
-  "message": ""
-}
-```
-
----
 
 ### Settings Configuration
 
