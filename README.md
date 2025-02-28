@@ -108,11 +108,22 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
 
 ### Server Messages
 
-| Type                  | Structure                                                                                                             | Notes                              |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| function_call_request | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Requests client function execution |
-| status                | `{ "type": "status", "message": "" }`                                                                                 | Updates or errors                  |
-| Binary Audio          | `[binary data]`                                                                                                       | Audio output per settings          |
+| Type                           | Structure                                                                                                             | Notes                                                                                  |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **`welcome`**                  | `{ "type": "welcome", "message": "Connection established" }`                                                          | Confirms that the WebSocket connection has been successfully opened.                   |
+| **`settings_applied`**         | `{ "type": "settings_applied", "message": "Settings applied successfully" }`                                          | Confirms that the configuration settings have been applied.                            |
+| **`conversation_text`**        | `{ "type": "conversation_text", "role": "user" \| "assistant", "content": "" }`                                       | Provides the text of what was spoken by either the user or the agent.                  |
+| **`user_started_speaking`**    | `{ "type": "user_started_speaking" }`                                                                                 | Notifies the client that the user has begun speaking.                                  |
+| **`agent_thinking`**           | `{ "type": "agent_thinking" }`                                                                                        | Informs the client that the agent is processing information.                           |
+| **`function_call_request`**    | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. |
+| **`function_calling_message`** | `{ "type": "function_calling_message", "id": "", "name": "", "arguments": "", "client_side": false }`                 | Provides information about a function being called.                                    |
+| **`agent_started_speaking`**   | `{ "type": "agent_started_speaking" }`                                                                                | Signals that the server has begun streaming the agent’s audio response.                |
+| **`agent_audio_done`**         | `{ "type": "agent_audio_done" }`                                                                                      | Indicates that the server has finished sending the final audio segment to the client.  |
+| **`errors`**                   | `{ "type": "error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
+| **`warnings`**                 | `{ "type": "warning", "message": "" }`                                                                                | Notifies the client of non-fatal errors or warnings.                                   |
+| **`Binary Audio`**             | `[binary data]`                                                                                                       | Audio output sent as binary data, per the settings configuration.                      |
+
+---
 
 #### Function Call Request Example
 
