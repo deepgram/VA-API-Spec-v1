@@ -22,11 +22,12 @@ WebSocket-based, real-time bidirectional communication.
 
 #### Settings Example
 
+// should we specify which fields are optional?
+
 ```json
 {
   "type": "SettingsConfiguration",
-  "type": "",
-  "experimental_features": false,
+  "experimental_features": false, // verbose and unclear, I know there was discussion around this, but what about just like "experimental"?
   "audio": {
     "input": {
       "encoding": "",
@@ -52,7 +53,7 @@ WebSocket-based, real-time bidirectional communication.
       "provider": {
         "type": "",
         "model": "",
-        "temperature": 0
+        "temperature": 0 // shouldn't "temperature" be dependent on the provider type?
       },
       "endpoint": {
         "url": "",
@@ -63,6 +64,7 @@ WebSocket-based, real-time bidirectional communication.
           "name": "",
           "description": "",
           "parameters": {}
+          // some sort of "client-side=true/false" yeah?
         }
       ],
       "instructions": ""
@@ -86,7 +88,7 @@ WebSocket-based, real-time bidirectional communication.
       ],
       "replay": false
     },
-    "fallbacks": [
+    "fallbacks": [ // did we decide to change this and just have think and speak take a vector of providers?
       {
         "think": {},
         "speak": {}
@@ -113,13 +115,13 @@ WebSocket-based, real-time bidirectional communication.
 
 | Type                           | Structure                                                                                                             | Notes                                                                                  |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **`welcome`**                  | `{ "type": "welcome", "message": "Connection established" }`                                                          | Confirms that the WebSocket connection has been successfully opened.                   |
+| **`welcome`**                  | `{ "type": "welcome", "message": "Connection established" }` // request id (for those who can't read headers)?        | Confirms that the WebSocket connection has been successfully opened.                   |
 | **`settings_applied`**         | `{ "type": "settings_applied", "message": "Settings applied successfully" }`                                          | Confirms that the configuration settings have been applied.                            |
 | **`conversation_text`**        | `{ "type": "conversation_text", "role": "user" \| "assistant", "content": "" }`                                       | Provides the text of what was spoken by either the user or the agent.                  |
 | **`user_started_speaking`**    | `{ "type": "user_started_speaking" }`                                                                                 | Notifies the client that the user has begun speaking.                                  |
 | **`agent_thinking`**           | `{ "type": "agent_thinking" }`                                                                                        | Informs the client that the agent is processing information.                           |
-| **`function_call_request`**    | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. |
-| **`function_calling_message`** | `{ "type": "function_calling_message", "id": "", "name": "", "arguments": "", "client_side": false }`                 | Provides information about a function being called.                                    |
+| **`function_call_request`**    | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. | // except when client_side = false
+| **`function_call_response`**   | `{ "type": "function_calling_response", "id": "", "name": "", "content": "" }`                                        | Shows the response of the function call for server-side function calls.                                    |
 | **`agent_started_speaking`**   | `{ "type": "agent_started_speaking" }`                                                                                | Signals that the server has begun streaming the agent’s audio response.                |
 | **`agent_audio_done`**         | `{ "type": "agent_audio_done" }`                                                                                      | Indicates that the server has finished sending the final audio segment to the client.  |
 | **`errors`**                   | `{ "type": "error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
@@ -173,7 +175,7 @@ WebSocket-based, real-time bidirectional communication.
 | agent.speak.endpoint.url       | String, optional                                 | Custom TTS endpoint                 |
 | agent.speak.endpoint.headers   | Object, optional                                 | Custom headers for TTS              |
 | agent.language                 | String, optional, default "en"                   | Agent language                      |
-| agent.fallbacks                | Array of think/speak objects, optional           | Provider fallback                   |
+| agent.fallbacks                | Array of think/speak objects, optional           | Provider fallback                   | // removing this yeah?
 
 #### Provider-Specific Speak Parameters
 
