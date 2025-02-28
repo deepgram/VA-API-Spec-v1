@@ -36,16 +36,8 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
       "container": ""
     }
   },
-  "context": {
-    "messages": [
-      {
-        "role": "",
-        "content": ""
-      }
-    ],
-    "replay": false
-  },
   "agent": {
+    "language": "",
     "listen": {
       "provider": {
         "type": "",
@@ -82,7 +74,15 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
         "headers": {}
       }
     },
-    "language": "",
+    "context": {
+      "messages": [
+        {
+          "role": "",
+          "content": ""
+        }
+      ],
+      "replay": false
+    },
     "fallbacks": [
       {
         "think": {},
