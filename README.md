@@ -1,7 +1,7 @@
 ### Endpoint
 
 - Current: `ws://agent.deepgram.com/agent`
-- New: `ws://agent.deepgram.com/v1/agent` (transition with 2-week migration period)
+- New: `ws://agent.deepgram.com/v1/converse` (transition with 2-week migration period)
 
 ### Connection
 
