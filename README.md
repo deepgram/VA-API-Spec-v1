@@ -1,7 +1,7 @@
 ### Endpoint
 
-- Current: `ws://agent.deepgram.com/agent`
-- New: `ws://agent.deepgram.com/v1/converse` (transition with 2-week migration period)
+- Current: `wss://agent.deepgram.com/agent`
+- New: `wss://agent.deepgram.com/v1/converse` (transition with 2-week migration period)
 
 ### Connection
 
@@ -11,37 +11,36 @@ WebSocket-based, real-time bidirectional communication.
 
 ### Client Messages
 
-| Type                  | Structure                                                                                                                    | Notes                                                                                    |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| SettingsConfiguration | `{ "type": "SettingsConfiguration", ...SettingsConfiguration }`                                                              | Initializes the voice agent and sets up audio transmission formats                       |
-| UpdateInstructions    | `{ "type": "UpdateInstructions", "instructions": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation |
-| UpdateSpeak           | `{ "type": "UpdateSpeak ", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }` | Enables changing the Speak model during the conversation                                 |
-| InjectAgentMessage    | `{ "type": "InjectAgentMessage", "content": "" }`                                                                            | Triggers an immediate statement from the agent                                           |
-| FunctionCallResponse  | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                                    | Sends the result of a function call back to the server                                   |
-| Binary Audio          | `[binary data]`                                                                                                              | Audio input per settings                                                                 |
+| Type                 | Structure                                                                                                                    | Notes                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Settings             | `{ "type": "Settings", ...Settings }`                                                                                        | Initializes the voice agent and sets up audio transmission formats                       |
+| UpdateInstructions   | `{ "type": "UpdateInstructions", "instructions": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation |
+| UpdateSpeak          | `{ "type": "UpdateSpeak ", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }` | Enables changing the Speak model during the conversation                                 |
+| InjectAgentMessage   | `{ "type": "InjectAgentMessage", "content": "" }`                                                                            | Triggers an immediate statement from the agent                                           |
+| FunctionCallResponse | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                                    | Sends the result of a function call back to the server                                   |
+| Binary Audio         | `[binary data]`                                                                                                              | Audio input per settings                                                                 |
 
 #### Settings Example
 
 ```json
 {
-  "type": "SettingsConfiguration",
-  "type": "",
-  "experimental_features": false,
+  "type": "Settings",
+  "experimental": false, // default is false
   "audio": {
     "input": {
-      "encoding": "",
-      "sample_rate": 0
+      "encoding": "", // string
+      "sample_rate": // int
     },
-    "output": {
+    "output": { // optional
       "encoding": "",
-      "sample_rate": 0,
-      "bitrate": 0,
+      "sample_rate": ,
+      "bitrate": ,
       "container": ""
     }
   },
   "agent": {
-    "language": "",
-    "listen": {
+    "language": "", // optional
+    "listen": { // optional, to deepgram's latest model
       "provider": {
         "type": "",
         "model": "",
@@ -52,41 +51,55 @@ WebSocket-based, real-time bidirectional communication.
       "provider": {
         "type": "",
         "model": "",
-        "temperature": 0
+        "temperature": // float, optional
       },
-      "endpoint": {
+      "endpoint": { // optional
         "url": "",
-        "headers": {}
+        "headers": {} // optional
       },
-      "functions": [
+      "functions": [ // optional
         {
           "name": "",
           "description": "",
-          "parameters": {}
+          "parameters": {},
+          "endpoint": { // optional, if not passed, function called client-side
+            "url": "",
+            "method": "",
+            "headers": {}, // optional
+          }
         }
       ],
-      "instructions": ""
+      "instructions": "" // optional
     },
-    "speak": {
+    "speak": { // optional, defaults to latest deepgram TTS model
       "provider": {
         "type": "",
-        "model": ""
+        ... // provider specific fields required
       },
-      "endpoint": {
+      "endpoint": { // optional if provider.type = 'deepgram', required for non-deepgram TTS providers
         "url": "",
-        "headers": {}
+        "headers": {} // optional
       }
     },
-    "context": {
+    "context": { // optional
       "messages": [
         {
+          "type": "ConversationText",
           "role": "",
           "content": ""
-        }
+        },
+        {
+          "type": "FunctionCallRequest",
+          ...
+        },
+        {
+          "type": "FunctionCallResponse",
+          ...
+        },
       ],
       "replay": false
     },
-    "fallbacks": [
+    "fallbacks": [ // optional
       {
         "think": {},
         "speak": {}
@@ -144,36 +157,37 @@ WebSocket-based, real-time bidirectional communication.
 }
 ```
 
-### Settings Configuration
+### Settings
 
-| Parameter                      | Type/Details                                     | Notes                               |
-| ------------------------------ | ------------------------------------------------ | ----------------------------------- |
-| type                           | String, "SettingsConfiguration"                  | Identifies config type              |
-| experimental_features          | Boolean, default false                           | Enables undocumented features       |
-| audio.input.encoding           | String                                           | Input audio encoding                |
-| audio.input.sample_rate        | Integer                                          | Input audio sample rate             |
-| audio.output.encoding          | String                                           | Output audio encoding               |
-| audio.output.sample_rate       | Integer                                          | Output audio sample rate            |
-| audio.output.bitrate           | Integer, optional                                | Output audio bitrate                |
-| audio.output.container         | String, optional                                 | Output file container               |
-| context.messages               | Array of {role, content}                         | Conversation history                |
-| context.replay                 | Boolean                                          | Replay last message on reconnect    |
-| agent.listen.provider.type     | "deepgram"                                       | STT provider                        |
-| agent.listen.provider.model    | String                                           | STT model                           |
-| agent.listen.provider.keyterms | Array of strings, optional                       | Fine-tune recognition (nova-3 only) |
-| agent.think.provider.type      | "open_ai", "anthropic", "x_ai", "amazon_bedrock" | LLM provider                        |
-| agent.think.provider.model     | String                                           | LLM model                           |
-| agent.think.provider.temp      | Number, optional (0-2 OpenAI, 0-1 Anthropic)     | Response randomness                 |
-| agent.think.endpoint.url       | String, optional                                 | Custom LLM endpoint                 |
-| agent.think.functions          | Array of Function objects                        | Callable functions                  |
-| agent.think.instructions       | String, optional                                 | LLM system prompt                   |
-| agent.think.endpoint.headers   | Object, optional                                 | Custom headers for LLM              |
-| agent.speak.provider.type      | "deepgram", "eleven_labs", "cartesia", "open_ai" | TTS provider                        |
-| agent.speak.provider.model     | String, varies by provider                       | TTS model                           |
-| agent.speak.endpoint.url       | String, optional                                 | Custom TTS endpoint                 |
-| agent.speak.endpoint.headers   | Object, optional                                 | Custom headers for TTS              |
-| agent.language                 | String, optional, default "en"                   | Agent language                      |
-| agent.fallbacks                | Array of think/speak objects, optional           | Provider fallback                   |
+| Parameter                      | Type/Details                                                            | Notes                                          |
+| ------------------------------ | ----------------------------------------------------------------------- | ---------------------------------------------- |
+| type                           | String, "Settings"                                                      | Identifies config type                         |
+| experimental                   | Boolean, default false                                                  | Enables undocumented features                  |
+| audio.input.encoding           | String                                                                  | Input audio encoding                           |
+| audio.input.sample_rate        | Integer                                                                 | Input audio sample rate                        |
+| audio.output.encoding          | String, optional                                                        | Output audio encoding                          |
+| audio.output.sample_rate       | Integer, optional                                                       | Output audio sample rate                       |
+| audio.output.bitrate           | Integer, optional                                                       | Output audio bitrate                           |
+| audio.output.container         | String, optional                                                        | Output file container                          |
+| context.messages               | Array of ConversationText \| FunctionCallRequest \|FunctionCallResponse | Conversation history                           |
+| context.replay                 | Boolean                                                                 | Replay last message on reconnect               |
+| agent.listen.provider.type     | "deepgram"                                                              | STT provider                                   |
+| agent.listen.provider.model    | String                                                                  | STT model                                      |
+| agent.listen.provider.keyterms | Array of strings, optional                                              | Prompt key-term recognition (nova-3 'en' only) |
+| agent.think                    | can be object or list of objects to support fallback                    | LLM settings                                   |
+| agent.think.provider.type      | "open_ai", "anthropic", "x_ai", "amazon_bedrock"                        | LLM provider (supports name aliases)           |
+| agent.think.provider.model     | String                                                                  | LLM model                                      |
+| agent.think.provider.temp      | Number, optional (0-2 OpenAI, 0-1 Anthropic)                            | Response randomness                            |
+| agent.think.endpoint.url       | String                                                                  | Custom LLM endpoint                            |
+| agent.think.functions          | Array of Function objects                                               | Callable functions                             |
+| agent.think.instructions       | String, optional                                                        | LLM system prompt                              |
+| agent.think.endpoint.headers   | Object, optional                                                        | Custom headers for LLM                         |
+| agent.speak                    | can be object or list of objects to support fallback                    | TTS configuration                              |
+| agent.speak.provider.type      | "deepgram", "eleven_labs", "cartesia", "open_ai"                        | TTS provider                                   |
+| agent.speak.provider.model     | String, varies by provider                                              | TTS model                                      |
+| agent.speak.endpoint.url       | String                                                                  | Custom TTS endpoint                            |
+| agent.speak.endpoint.headers   | Object, optional                                                        | Custom headers for TTS                         |
+| agent.language                 | String, optional, default "en"                                          | Agent language                                 |
 
 #### Provider-Specific Speak Parameters
 
@@ -186,6 +200,6 @@ WebSocket-based, real-time bidirectional communication.
 
 ### Notes
 
-- Audio: Binary messages match `audio.input`/`audio.output` settings.
+- Audio: Binary messages will match `audio.input`/`audio.output` settings.
 - Rollout: 2-week dev/test, then 2-week migration period announced via email/Slack.
-- Internal Features: Hidden unless `experimental_features: true`.
+- Internal Features: Hidden unless `experimental: true`.
