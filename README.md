@@ -5,7 +5,7 @@
 
 ### Connection
 
-WebSocket-based, real-time bidirectional communication. Authentication not specified.
+WebSocket-based, real-time bidirectional communication.
 
 ---
 
