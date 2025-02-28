@@ -13,7 +13,7 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
 
 | Type                   | Structure                                                                   | Notes                        |
 | ---------------------- | --------------------------------------------------------------------------- | ---------------------------- |
-| settings               | `{ "type": "settings", ...SettingsConfiguration }`                          | Configures agent behavior    |
+| settings               | `{ "type": "settings", ...Settings }`                                       | Configures agent behavior    |
 | function_call_response | `{ "type": "function_call_response", "id": "", "name": "", "content": "" }` | Response to function request |
 | Binary Audio           | `[binary data]`                                                             | Audio input per settings     |
 
@@ -22,8 +22,7 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
 ```json
 {
   "type": "settings",
-  "type": "",
-  "experimental_features": false,
+  "experimental": false,
   "audio": {
     "input": {
       "encoding": "",
@@ -146,7 +145,7 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
 | Parameter                      | Type/Details                                     | Notes                               |
 | ------------------------------ | ------------------------------------------------ | ----------------------------------- |
 | type                           | String, "SettingsConfiguration"                  | Identifies config type              |
-| experimental_features          | Boolean, default false                           | Enables undocumented features       |
+| experimental                   | Boolean, default false                           | Enables undocumented features       |
 | audio.input.encoding           | String                                           | Input audio encoding                |
 | audio.input.sample_rate        | Integer                                          | Input audio sample rate             |
 | audio.output.encoding          | String                                           | Output audio encoding               |
@@ -185,4 +184,4 @@ WebSocket-based, real-time bidirectional communication. Authentication not speci
 
 - Audio: Binary messages match `audio.input`/`audio.output` settings.
 - Rollout: 2-week dev/test, then 2-week migration period announced via email/Slack.
-- Internal Features: Hidden unless `experimental_features: true`.
+- Internal Features: Hidden unless `experimental: true`.
