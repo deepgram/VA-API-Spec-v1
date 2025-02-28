@@ -74,7 +74,7 @@ WebSocket-based, real-time bidirectional communication.
     "speak": { // optional, defaults to latest deepgram TTS model
       "provider": {
         "type": "",
-        ... // provider specific fields required
+        ... // provider specific fields
       },
       "endpoint": { // optional if provider.type = 'deepgram', required for non-deepgram TTS providers
         "url": "",
@@ -126,13 +126,12 @@ WebSocket-based, real-time bidirectional communication.
 
 | Type                         | Structure                                                                                                             | Notes                                                                                  |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **`welcome`**                | `{ "type": "Welcome", "message": "Connection established" }`                                                          | Confirms that the WebSocket connection has been successfully opened.                   |
-| **`SettingsApplied`**        | `{ "type": "SettingsApplied", "message": "Settings applied successfully" }`                                           | Confirms that the configuration settings have been applied.                            |
+| **`welcome`**                | `{ "type": "Welcome", "request_id": "" }`                                                                             | Confirms that the WebSocket connection has been successfully opened.                   |
+| **`SettingsApplied`**        | `{ "type": "SettingsApplied" }`                                                                                       | Confirms that the configuration settings have been applied.                            |
 | **`ConversationText`**       | `{ "type": "ConversationText", "role": "user" \| "assistant", "content": "" }`                                        | Provides the text of what was spoken by either the user or the agent.                  |
 | **`UserStartedSpeaking`**    | `{ "type": "UserStartedSpeaking" }`                                                                                   | Notifies the client that the user has begun speaking.                                  |
-| **`AgentThinking`**          | `{ "type": "AgentThinking" }`                                                                                         | Informs the client that the agent is processing information.                           |
-| **`FunctionCallRequest`**    | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. |
-| **`FunctionCallingMessage`** | `{ "type": "FunctionCallingMessage", "id": "", "name": "", "arguments": "", "client_side": false }`                   | Provides information about a function being called.                                    |
+| **`AgentThinking`**          | `{ "type": "AgentThinking", "content": "" }`                                                                          | Informs the client that the agent is processing information.                           |
+| **`FunctionCallRequest`**    | `{ "type": "FunctionCallRequest", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }`   | Sent when the agent needs to make a function call; requests client function execution. |
 | **`AgentStartedSpeaking`**   | `{ "type": "AgentStartedSpeaking" }`                                                                                  | Signals that the server has begun streaming the agent’s audio response.                |
 | **`AgentAudioDone`**         | `{ "type": "AgentAudioDone" }`                                                                                        | Indicates that the server has finished sending the final audio segment to the client.  |
 | **`Error`**                  | `{ "type": "Error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
@@ -169,7 +168,7 @@ WebSocket-based, real-time bidirectional communication.
 | audio.output.sample_rate       | Integer, optional                                                       | Output audio sample rate                       |
 | audio.output.bitrate           | Integer, optional                                                       | Output audio bitrate                           |
 | audio.output.container         | String, optional                                                        | Output file container                          |
-| context.messages               | Array of ConversationText \| FunctionCallRequest \|FunctionCallResponse | Conversation history                           |
+| context.messages               | Array of ConversationText \| FunctionCallRequest \| FunctionCallResponse| Conversation history                           |
 | context.replay                 | Boolean                                                                 | Replay last message on reconnect               |
 | agent.listen.provider.type     | "deepgram"                                                              | STT provider                                   |
 | agent.listen.provider.model    | String                                                                  | STT model                                      |
@@ -184,7 +183,6 @@ WebSocket-based, real-time bidirectional communication.
 | agent.think.endpoint.headers   | Object, optional                                                        | Custom headers for LLM                         |
 | agent.speak                    | can be object or list of objects to support fallback                    | TTS configuration                              |
 | agent.speak.provider.type      | "deepgram", "eleven_labs", "cartesia", "open_ai"                        | TTS provider                                   |
-| agent.speak.provider.model     | String, varies by provider                                              | TTS model                                      |
 | agent.speak.endpoint.url       | String                                                                  | Custom TTS endpoint                            |
 | agent.speak.endpoint.headers   | Object, optional                                                        | Custom headers for TTS                         |
 | agent.language                 | String, optional, default "en"                                          | Agent language                                 |
