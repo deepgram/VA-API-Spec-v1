@@ -98,13 +98,7 @@ WebSocket-based, real-time bidirectional communication.
         },
       ],
       "replay": false
-    },
-    "fallbacks": [ // optional
-      {
-        "think": {},
-        "speak": {}
-      }
-    ]
+    }
   }
 }
 ```
