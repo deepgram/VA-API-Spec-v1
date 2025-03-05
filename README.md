@@ -99,12 +99,6 @@ WebSocket-based, real-time bidirectional communication.
       ],
       "replay": false
     },
-    "fallbacks": [ // optional
-      {
-        "think": {},
-        "speak": {}
-      }
-    ]
   }
 }
 ```
@@ -124,19 +118,19 @@ WebSocket-based, real-time bidirectional communication.
 
 ### Server Messages
 
-| Type                         | Structure                                                                                                             | Notes                                                                                  |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **`welcome`**                | `{ "type": "Welcome", "message": "Connection established" }`                                                          | Confirms that the WebSocket connection has been successfully opened.                   |
-| **`SettingsApplied`**        | `{ "type": "SettingsApplied", "message": "Settings applied successfully" }`                                           | Confirms that the configuration settings have been applied.                            |
-| **`ConversationText`**       | `{ "type": "ConversationText", "role": "user" \| "assistant", "content": "" }`                                        | Provides the text of what was spoken by either the user or the agent.                  |
-| **`UserStartedSpeaking`**    | `{ "type": "UserStartedSpeaking" }`                                                                                   | Notifies the client that the user has begun speaking.                                  |
-| **`AgentThinking`**          | `{ "type": "AgentThinking" }`                                                                                         | Informs the client that the agent is processing information.                           |
-| **`FunctionCallRequest`**    | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. |
-| **`AgentStartedSpeaking`**   | `{ "type": "AgentStartedSpeaking" }`                                                                                  | Signals that the server has begun streaming the agent’s audio response.                |
-| **`AgentAudioDone`**         | `{ "type": "AgentAudioDone" }`                                                                                        | Indicates that the server has finished sending the final audio segment to the client.  |
-| **`Error`**                  | `{ "type": "Error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
-| **`Warning`**                | `{ "type": "Warning", "message": "" }`                                                                                | Notifies the client of non-fatal errors or warnings.                                   |
-| **`Binary Audio`**           | `[binary data]`                                                                                                       | Audio output sent as binary data, per the settings configuration.                      |
+| Type                       | Structure                                                                                                             | Notes                                                                                  |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **`welcome`**              | `{ "type": "Welcome", "message": "Connection established" }`                                                          | Confirms that the WebSocket connection has been successfully opened.                   |
+| **`SettingsApplied`**      | `{ "type": "SettingsApplied", "message": "Settings applied successfully" }`                                           | Confirms that the configuration settings have been applied.                            |
+| **`ConversationText`**     | `{ "type": "ConversationText", "role": "user" \| "assistant", "content": "" }`                                        | Provides the text of what was spoken by either the user or the agent.                  |
+| **`UserStartedSpeaking`**  | `{ "type": "UserStartedSpeaking" }`                                                                                   | Notifies the client that the user has begun speaking.                                  |
+| **`AgentThinking`**        | `{ "type": "AgentThinking" }`                                                                                         | Informs the client that the agent is processing information.                           |
+| **`FunctionCallRequest`**  | `{ "type": "function_call_request", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }` | Sent when the agent needs to make a function call; requests client function execution. |
+| **`AgentStartedSpeaking`** | `{ "type": "AgentStartedSpeaking" }`                                                                                  | Signals that the server has begun streaming the agent’s audio response.                |
+| **`AgentAudioDone`**       | `{ "type": "AgentAudioDone" }`                                                                                        | Indicates that the server has finished sending the final audio segment to the client.  |
+| **`Error`**                | `{ "type": "Error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
+| **`Warning`**              | `{ "type": "Warning", "message": "" }`                                                                                | Notifies the client of non-fatal errors or warnings.                                   |
+| **`Binary Audio`**         | `[binary data]`                                                                                                       | Audio output sent as binary data, per the settings configuration.                      |
 
 ---
 
