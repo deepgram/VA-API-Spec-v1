@@ -14,7 +14,7 @@ WebSocket-based, real-time bidirectional communication.
 | Type                 | Structure                                                                                                                    | Notes                                                                                    |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Settings             | `{ "type": "Settings", ...Settings }`                                                                                        | Initializes the voice agent and sets up audio transmission formats                       |
-| UpdateInstructions   | `{ "type": "UpdateInstructions", "instructions": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation |
+| UpdatePrompt   | `{ "type": "UpdatePrompt", "prompt": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation. Passed as the system_prompt to LLMs |
 | UpdateSpeak          | `{ "type": "UpdateSpeak ", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }` | Enables changing the Speak model during the conversation                                 |
 | InjectAgentMessage   | `{ "type": "InjectAgentMessage", "content": "" }`                                                                            | Triggers an immediate statement from the agent                                           |
 | FunctionCallResponse | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                                    | Sends the result of a function call back to the server                                   |
@@ -69,7 +69,7 @@ WebSocket-based, real-time bidirectional communication.
           }
         }
       ],
-      "instructions": "" // optional
+      "prompt": "" // optional
     },
     "speak": { // optional, defaults to latest deepgram TTS model
       "provider": {
@@ -173,7 +173,7 @@ WebSocket-based, real-time bidirectional communication.
 | agent.think.provider.temp      | Number, optional (0-2 OpenAI, 0-1 Anthropic)                            | Response randomness                            |
 | agent.think.endpoint.url       | String                                                                  | Custom LLM endpoint                            |
 | agent.think.functions          | Array of Function objects                                               | Callable functions                             |
-| agent.think.instructions       | String, optional                                                        | LLM system prompt                              |
+| agent.think.prompt       | String, optional                                                        | LLM system prompt                              |
 | agent.think.endpoint.headers   | Object, optional                                                        | Custom headers for LLM                         |
 | agent.speak                    | can be object or list of objects to support fallback                    | TTS configuration                              |
 | agent.speak.provider.type      | "deepgram", "eleven_labs", "cartesia", "open_ai"                        | TTS provider                                   |
