@@ -185,7 +185,7 @@ WebSocket-based, real-time bidirectional communication.
 
 - **deepgram**: `model`
 - **eleven_labs**: `model_id`, `voice_id`, `language_code` (optional)
-- **cartesia**: `model_id`, `voice`, `mode: "id"`, `id`
+- **cartesia**: `model_id`, `voice`, `language`, `mode: "id"`, `id`
 - **open_ai**: `model`, `voice`
 
 ---
