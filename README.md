@@ -77,28 +77,11 @@ WebSocket-based, real-time bidirectional communication.
         ... // provider specific fields
       },
       "endpoint": { // optional if provider.type = 'deepgram', required for non-deepgram TTS providers
-        "url": "",
+        "url": "", // pass a `ws` or `wss` url to use the provider's websocket API
         "headers": {} // optional
       }
     },
-    "context": { // optional
-      "messages": [
-        {
-          "type": "ConversationText",
-          "role": "",
-          "content": ""
-        },
-        {
-          "type": "FunctionCallRequest",
-          ...
-        },
-        {
-          "type": "FunctionCallResponse",
-          ...
-        },
-      ],
-      "replay": false
-    }
+    "greeting": "" // optional
   }
 }
 ```
@@ -162,8 +145,7 @@ WebSocket-based, real-time bidirectional communication.
 | audio.output.sample_rate       | Integer, optional                                                       | Output audio sample rate                       |
 | audio.output.bitrate           | Integer, optional                                                       | Output audio bitrate                           |
 | audio.output.container         | String, optional                                                        | Output file container                          |
-| context.messages               | Array of ConversationText \| FunctionCallRequest \| FunctionCallResponse| Conversation history                           |
-| context.replay                 | Boolean                                                                 | Replay last message on reconnect               |
+| agent.greeting                 | String, optional                                                        | Message that agent will speak at the start     |
 | agent.listen.provider.type     | "deepgram"                                                              | STT provider                                   |
 | agent.listen.provider.model    | String                                                                  | STT model                                      |
 | agent.listen.provider.keyterms | Array of strings, optional                                              | Prompt key-term recognition (nova-3 'en' only) |
@@ -173,7 +155,7 @@ WebSocket-based, real-time bidirectional communication.
 | agent.think.provider.temp      | Number, optional (0-2 OpenAI, 0-1 Anthropic)                            | Response randomness                            |
 | agent.think.endpoint.url       | String                                                                  | Custom LLM endpoint                            |
 | agent.think.functions          | Array of Function objects                                               | Callable functions                             |
-| agent.think.prompt       | String, optional                                                        | LLM system prompt                              |
+| agent.think.prompt             | String, optional                                                        | LLM system prompt                              |
 | agent.think.endpoint.headers   | Object, optional                                                        | Custom headers for LLM                         |
 | agent.speak                    | can be object or list of objects to support fallback                    | TTS configuration                              |
 | agent.speak.provider.type      | "deepgram", "eleven_labs", "cartesia", "open_ai"                        | TTS provider                                   |
@@ -185,7 +167,7 @@ WebSocket-based, real-time bidirectional communication.
 
 - **deepgram**: `model`
 - **eleven_labs**: `model_id`, `voice_id`, `language_code` (optional)
-- **cartesia**: `model_id`, `voice`, `language`, `mode: "id"`, `id`
+- **cartesia**: `model_id`, `voice`, `language` (optional), `mode: "id"`, `id`
 - **open_ai**: `model`, `voice`
 
 ---
