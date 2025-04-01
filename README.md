@@ -115,8 +115,8 @@ WebSocket-based, real-time bidirectional communication.
 | **`FunctionCallResponse`**   | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                             | Sent when the agent makes a server-side function call; purely informational.           |
 | **`AgentStartedSpeaking`**   | `{ "type": "AgentStartedSpeaking" }`                                                                                  | Signals that the server has begun streaming the agent’s audio response.                |
 | **`AgentAudioDone`**         | `{ "type": "AgentAudioDone" }`                                                                                        | Indicates that the server has finished sending the final audio segment to the client.  |
-| **`Error`**                  | `{ "type": "Error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
-| **`Warning`**                | `{ "type": "Warning", "message": "" }`                                                                                | Notifies the client of non-fatal errors or warnings.                                   |
+| **`Error`**                  | `{ "type": "Error", "description": "", "code": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
+| **`Warning`**                | `{ "type": "Warning", "description": "", "code": "" }`                                                                                | Notifies the client of non-fatal errors or warnings.                                   |
 | **`Binary Audio`**           | `[binary data]`                                                                                                       | Audio output sent as binary data, per the settings configuration.                      |
 
 ---
@@ -170,7 +170,7 @@ WebSocket-based, real-time bidirectional communication.
 #### Provider-Specific Speak Parameters
 
 - **deepgram**: `model`
-- **eleven_labs**: `model_id`, `voice_id`, `language_code` (optional)
+- **eleven_labs**: `model_id`, `language_code` (optional)
 - **cartesia**: `model_id`, `voice`, `language` (optional), `mode: "id"`, `id`
 - **open_ai**: `model`, `voice`
 
