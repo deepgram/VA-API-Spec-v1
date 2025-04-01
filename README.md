@@ -14,10 +14,11 @@ WebSocket-based, real-time bidirectional communication.
 | Type                 | Structure                                                                                                                    | Notes                                                                                    |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | Settings             | `{ "type": "Settings", ...Settings }`                                                                                        | Initializes the voice agent and sets up audio transmission formats                       |
-| UpdatePrompt   | `{ "type": "UpdatePrompt", "prompt": "" }`                                                                       | Allows giving additional instructions to the Think model in the middle of a conversation. Passed as the system_prompt to LLMs |
-| UpdateSpeak          | `{ "type": "UpdateSpeak ", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }` | Enables changing the Speak model during the conversation                                 |
+| UpdatePrompt         | `{ "type": "UpdatePrompt", "prompt": "" }`                                                                                   | Allows giving additional instructions to the Think model in the middle of a conversation. Passed as the system_prompt to LLMs |
+| UpdateSpeak          | `{ "type": "UpdateSpeak", "speak": { "provider": { "type": "", "model": "" }, "endpoint": { "url": "", "headers": {} } } }`  | Enables changing the Speak model during the conversation                                 |
 | InjectAgentMessage   | `{ "type": "InjectAgentMessage", "content": "" }`                                                                            | Triggers an immediate statement from the agent                                           |
 | FunctionCallResponse | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                                    | Sends the result of a function call back to the server                                   |
+| KeepAlive            | `{ "type": "KeepAlive" }`                                                                                                    | Instructs the server to keep the connection open even if the client isn't sending audio  |
 | Binary Audio         | `[binary data]`                                                                                                              | Audio input per settings                                                                 |
 
 #### Settings Example
@@ -105,10 +106,13 @@ WebSocket-based, real-time bidirectional communication.
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | **`welcome`**                | `{ "type": "Welcome", "request_id": "" }`                                                                             | Confirms that the WebSocket connection has been successfully opened.                   |
 | **`SettingsApplied`**        | `{ "type": "SettingsApplied" }`                                                                                       | Confirms that the configuration settings have been applied.                            |
+| **`PromptUpdated`**          | `{ "type": "PromptUpdated" }`                                                                                         | Confirms that an `UpdatePrompt` message from the client has been applied.              |
+| **`SpeakUpdated`**           | `{ "type": "SpeakUpdated" }`                                                                                          | Confirms that an `UpdateSpeak` message from the client has been applied.               |
 | **`ConversationText`**       | `{ "type": "ConversationText", "role": "user" \| "assistant", "content": "" }`                                        | Provides the text of what was spoken by either the user or the agent.                  |
 | **`UserStartedSpeaking`**    | `{ "type": "UserStartedSpeaking" }`                                                                                   | Notifies the client that the user has begun speaking.                                  |
 | **`AgentThinking`**          | `{ "type": "AgentThinking", "content": "" }`                                                                          | Informs the client that the agent is processing information.                           |
-| **`FunctionCallRequest`**    | `{ "type": "FunctionCallRequest", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }`   | Sent when the agent needs to make a function call; requests client function execution. |
+| **`FunctionCallRequest`**    | `{ "type": "FunctionCallRequest", "functions": [{ "id": "", "name": "", "arguments": "", "client_side": false }] }`   | Sent when the agent makes a function call; may request client-side function execution. |
+| **`FunctionCallResponse`**   | `{ "type": "FunctionCallResponse", "id": "", "name": "", "content": "" }`                                             | Sent when the agent makes a server-side function call; purely informational.           |
 | **`AgentStartedSpeaking`**   | `{ "type": "AgentStartedSpeaking" }`                                                                                  | Signals that the server has begun streaming the agent’s audio response.                |
 | **`AgentAudioDone`**         | `{ "type": "AgentAudioDone" }`                                                                                        | Indicates that the server has finished sending the final audio segment to the client.  |
 | **`Error`**                  | `{ "type": "Error", "message": "" }`                                                                                  | Notifies the client of fatal errors that occurred on the server side.                  |
@@ -121,7 +125,7 @@ WebSocket-based, real-time bidirectional communication.
 
 ```json
 {
-  "type": "function_call_request",
+  "type": "FunctionCallRequest",
   "functions": [
     {
       "id": "",
