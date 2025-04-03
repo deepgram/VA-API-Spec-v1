@@ -1,7 +1,6 @@
 ### Endpoint
 
-- current: `wss://agent.deepgram.com/v1/agent/converse`
-- coming soon: `wss://api.deepgram.com/v1/agent/converse`
+- `wss://agent.deepgram.com/v1/agent/converse`
 
 ### Connection
 
