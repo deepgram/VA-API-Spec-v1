@@ -55,7 +55,11 @@ WebSocket-based, real-time bidirectional communication.
       },
       "endpoint": { // optional
         "url": "",
-        "headers": {} // optional
+        "headers": { // optional
+          "key1": "val1",
+          "key2": "val2",
+          ...
+        }
       },
       "functions": [ // optional
         {
@@ -65,7 +69,11 @@ WebSocket-based, real-time bidirectional communication.
           "endpoint": { // optional, if not passed, function called client-side
             "url": "",
             "method": "",
-            "headers": {}, // optional
+            "headers": { // optional
+              "key1": "val1",
+              "key2": "val2",
+              ...
+            }
           }
         }
       ],
@@ -78,7 +86,11 @@ WebSocket-based, real-time bidirectional communication.
       },
       "endpoint": { // optional if provider.type = 'deepgram', required for non-deepgram TTS providers
         "url": "", // pass a `ws` or `wss` url to use the provider's websocket API
-        "headers": {} // optional
+        "headers": { // optional
+          "key1": "val1",
+          "key2": "val2",
+          ...
+        }
       }
     },
     "greeting": "" // optional
