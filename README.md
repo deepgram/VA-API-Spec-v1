@@ -27,7 +27,7 @@ WebSocket-based, real-time bidirectional communication.
   "type": "Settings",
   "experimental": false, // default is false
   "audio": {
-    "input": {
+    "input": { // default is 16kHz linear16
       "encoding": "", // string
       "sample_rate": // int
     },
