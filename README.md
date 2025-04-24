@@ -165,7 +165,7 @@ WebSocket-based, real-time bidirectional communication.
 | agent.listen.provider.model    | String                                                                  | STT model                                      |
 | agent.listen.provider.keyterms | Array of strings, optional                                              | Prompt key-term recognition (nova-3 'en' only) |
 | agent.think                    | can be object or list of objects to support fallback                    | LLM settings                                   |
-| agent.think.provider.type      | "open_ai", "anthropic", "x_ai", "amazon_bedrock"                        | LLM provider (supports name aliases)           |
+| agent.think.provider.type      | "open_ai", "anthropic", "x_ai"                                          | LLM provider (supports name aliases)           |
 | agent.think.provider.model     | String                                                                  | LLM model                                      |
 | agent.think.provider.temp      | Number, optional (0-2 OpenAI, 0-1 Anthropic)                            | Response randomness                            |
 | agent.think.endpoint.url       | String                                                                  | Custom LLM endpoint                            |
